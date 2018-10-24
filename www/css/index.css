@@ -1,0 +1,108 @@
+html {
+  font-size: 12px;
+}
+body {
+  margin: 0;
+  padding: 0;
+  background: #eee;
+  font-family: "consolas", "微软雅黑";
+  user-select: none;
+  max-width: 450px;
+  box-sizing: border-box;
+}
+body > * {
+  max-width: 450px;
+}
+.title {
+  padding: 1rem 5%;
+  background: steelblue;
+  color: white;
+  box-shadow: 0 0.2rem 0.3rem rgba(48, 48, 48 192);
+}
+.title h1 {
+  margin: 0;
+  padding: 0;
+}
+.hide {
+  display: none;
+}
+.dashboard {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  box-sizing: border-box;
+  box-shadow: 0 0.2rem 0.3rem rgba(48, 48, 48 192);
+  height: 3rem;
+}
+.dashboard .buttons {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+.dashboard .buttons button {
+  float: left;
+  width: 25%;
+  height: 3rem;
+  background: steelblue;
+  color: white;
+  font-size: 1.3rem;
+  border: 1px solid #ccc;
+}
+.container {
+  margin-top: 5px;
+  background: #fff;
+}
+.container .empty {
+  color: #fff;
+}
+.container .column {
+  border-left: 1px solid #000;
+}
+.container .column .lat {
+  display: inline-block;
+  width: 11%;
+  box-sizing: border-box;
+  text-align: center;
+  height: 3rem;
+  line-height: 3rem;
+  font-size: 16px;
+  border-right: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+}
+.container .column .lat:nth-child(3n) {
+  border-right-color: #000;
+}
+.container .column:first-child .lat {
+  border-top: 1px solid #000;
+}
+.container .column:nth-child(3n) .lat {
+  border-bottom-color: #000;
+}
+.popup-num {
+  position: fixed;
+  width: 210px;
+  background: #333;
+  color: #fff;
+  box-shadow: 2px 2px #e58;
+  transform: translate(-50%, -50%);
+  left: 50%;
+  top: 50%;
+  font-size: 16px;
+  text-align: center;
+}
+.popup-num .red {
+  background: red;
+}
+.popup-num .green {
+  background: green;
+}
+.popup-num .row {
+  height: 40px;
+  line-height: 40px;
+  display: flex;
+}
+.popup-num .row span {
+  flex: 1;
+}
