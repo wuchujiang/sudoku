@@ -1,0 +1,12 @@
+<!--level/level.wxml-->
+<view class='select-level'>选择关卡</view>
+<view class='level-container'>
+  <view class="level-item-wrap" wx:for="{{levels}}">
+    <view class="level-item {{item.time ? 'complete' : ''}}" data-level="{{item.level}}">
+      <navigator url="../game/game?level={{item.level}}" class='level-content'>
+        <text class='level-counter'>{{item.level}}</text>
+        <text class='level-time' wx-if="{{item.time}}">{{item.time}}</text>
+      </navigator>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,2 @@
+<!--pages/game.wxml-->
+<view>第{{uppercaseLevel}}关</view>
