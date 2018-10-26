@@ -1,5 +1,6 @@
 // pages/game.js
 const { sectionToChinese } = require('../../utils/util.js');
+const levelData = require('./gameData.js');
 
 Page({
 
@@ -9,6 +10,8 @@ Page({
   data: {
     level: 1,
     uppercaseLevel: '',
+    levelData: [],
+    time: 0,
   },
 
   /**
@@ -18,6 +21,7 @@ Page({
     this.setData({
       level: options.level || 1,
       uppercaseLevel: sectionToChinese(options.level),
+      levelData: levelData[level-1],
     });
   },
 

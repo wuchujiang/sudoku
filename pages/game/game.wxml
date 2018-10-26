@@ -1,2 +1,5 @@
 <!--pages/game.wxml-->
 <view>第{{uppercaseLevel}}关</view>
+<view class="container">
+  {{levelData}}
+</view>
