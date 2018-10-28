@@ -1,4 +1,5 @@
 // level/level.js
+const { numToMinute} = require('../../utils/util.js');
 Page({
 
   /**
@@ -6,6 +7,7 @@ Page({
    */
   data: {
     levels: [],
+    contentClass: '',
   },
 
   /**
@@ -19,16 +21,28 @@ Page({
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
+    let levelRecord = {};
+    wx.setStorageSync('levelRecord', {level_1: {time: 100}})
+    try {
+      levelRecord = wx.getStorageSync('levelRecord') || {};
+     
+    } catch(e) {
+      console.log(e);
+      // Do something when catch error
+    }
     const array = [];
     for (let i = 0; i < 24; i++) {
+      const levelDataItem = levelRecord['level_' + (i + 1)];
       array.push({
         level: i + 1,
-        time: 200,
-      });
-      this.setData({
-        levels: array
+        time: levelDataItem ? numToMinute(levelDataItem.time) : '',
+        complete: typeof levelDataItem !== 'undefined',
+        lock: i === 0 ? false : levelDataItem ? false : true,
       });
     }
+    this.setData({
+      levels: array
+    });
   },
 
   /**

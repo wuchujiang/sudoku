@@ -41,7 +41,18 @@ const sectionToChinese = section =>  {
   return chnStr;
 }
 
+const numToMinute = (num) => {
+  const number = parseInt(num);
+  if(num === 0) {
+    return '00:00';
+  }
+  const tenbits = Math.floor(number / 60);
+  const position = number % 60;
+  return `${formatNumber(tenbits)}:${formatNumber(position)}`;
+}
+
 module.exports = {
   formatTime: formatTime,
   sectionToChinese,
+  numToMinute,
 }
