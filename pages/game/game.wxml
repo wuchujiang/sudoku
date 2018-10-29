@@ -12,3 +12,23 @@
     </view>
   </view>
 </view>
+
+<view class="container">
+  <view class="grid input-wrap">
+    <view class="input-item">1</view>
+    <view class="input-item">3</view>
+    <view class="input-item">2</view>
+    <view class="input-item">4</view>
+    <view class="input-item">5</view>
+    <view class="input-item">6</view>
+    <view class="input-item">7</view>
+  </view>
+  <view class="grid input-wrap">
+    <view class="input-item">8</view>
+    <view class="input-item">9</view>
+    <view class="input-item delete">删除</view>
+    <view class="input-item pause">暂停</view>
+    <view class="input-item mark">标记</view>
+    <view class="input-item restart">重玩</view>
+  </view>
+</view>
