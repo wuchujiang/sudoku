@@ -1,12 +1,13 @@
 <!--level/level.wxml-->
-<view class='select-level'>选择关卡</view>
+<view class='select-level'>关卡</view>
 <view class='level-container'>
-  <view class="level-item-wrap" wx:for="{{levels}}">
-    <view class="level-item {{item.complete ? 'complete' : ''}}" data-level="{{item.level}}">
-      <navigator url="../game/game?level={{item.level}}" class='level-content{{item.complete ? " complete" : ""}}{{item.lock ? " lock" : ""}}'>
+  <view class="level-item-wrap" wx:for="{{levels}}" wx:key="{{item.level}}">
+    <view class="level-item" data-level="{{item.level}}">
+      <navigator wx:if="{{!item.lock}}" url="../game/game?level={{item.level}}" class='level-content{{item.complete ? " complete" : ""}}'>
         <text class='level-counter'>{{item.lock ? '' : item.level}}</text>
         <text class='level-time' wx-if="{{item.time}}">{{item.time}}</text>
       </navigator>
+      <view wx:else class="level-content lock"></view>
     </view>
   </view>
 </view>

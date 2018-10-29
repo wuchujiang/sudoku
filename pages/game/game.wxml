@@ -1,5 +1,14 @@
 <!--pages/game.wxml-->
 <view>第{{uppercaseLevel}}关</view>
+<!-- <view>时间{{time}}</view> -->
 <view class="container">
-  {{levelData}}
+  <view class='grid game-col' wx:for="{{levelData}}" wx:key="{{index}}">
+    <view class="grid-content" wx:for="{{item}}" wx:for-index="idx" wx:key="{{idx}}" wx:for-item="text">
+      <view class="text-content">
+        <view class='num-content'>
+          <text class='num-text'>{{text === 0 ? '' : text}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
 </view>

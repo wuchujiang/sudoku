@@ -180,6 +180,4 @@ const levelData = [[[0, 9, 7, 2, 5, 0, 3, 6, 0],
 [8, 0, 0, 0, 6, 1, 0, 0, 0],
     [5, 0, 0, 0, 0, 4, 0, 0, 0]]];
 
-module.exports = {
-  levelData,
-}
+module.exports = levelData;
