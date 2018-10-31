@@ -12,6 +12,10 @@ Page({
     uppercaseLevel: '',
     levelData: [],
     time: 0,
+    colIndex: '',
+    rowindex: '',
+    pause: false,
+    markHash: {}, // 用于存放标记的单元格 1x1。
   },
 
   /**
@@ -20,9 +24,9 @@ Page({
   onLoad: function (options) {
     const level = parseInt(options.level || 1);
     this.setData({
-      level: level,
+      level, // 关卡
       uppercaseLevel: sectionToChinese(level),
-      levelData: levelData[level-1],
+      levelData: levelData[level-1], // 游戏数据
     });
   },
 
@@ -36,6 +40,80 @@ Page({
       });
     }, 1000);
   },
+  stopTiming() {
+    //清除计时器
+    clearInterval(this.timer);
+  },
+
+  // 点击数独格子
+  inputSudoku(e) {
+    console.log(e);
+    const {input, colindex, rowindex, value, selected} = e.target.dataset;
+    // 允许输入
+    if(input) {
+      // 设置当前选择的单元格坐标
+      this.setData({
+        rowIndex: !selected ? rowindex : '',
+        colIndex: !selected ? colindex : '',
+      });
+    }
+  },
+
+  // 填充数字
+  inputNumber(e) {
+    const {number} = e.target.dataset;
+    const {rowIndex, colIndex, levelData} = this.data;
+    if(rowIndex !== '' && colIndex !== '') {
+      levelData[rowIndex][colIndex] = number;
+      this.setData({
+        levelData,
+      });
+    }
+  },
+
+  // 删除
+  deleteAction() {
+    const {rowIndex, colIndex, levelData} = this.data;
+    // 删除选中的数字
+    if (rowIndex !== '' && colIndex !== '' && levelData[rowIndex][colIndex] !== '') {
+      levelData[rowIndex][colIndex] = 0;
+      this.setData({
+        levelData,
+      });
+    }
+  },
+
+  // 暂停游戏
+  pauseAction() {
+    this.stopTiming();
+    this.setData({
+      pause: true,
+    });
+  },
+
+  // 取消暂停游戏
+  unPauseAction() {
+    this.startTiming();
+    this.setData({
+      pause: false,
+    });
+  },
+
+  // 标记单元格
+  markAction() {
+    const {markHash, colIndex, rowIndex} = this.data;
+    if(colIndex !=='' && rowIndex !== '') {
+      // 判断是否已经是标记的，如果已经标记了，那么取消标记
+      let key = `${colIndex}-${rowIndex}`;
+      if(markHash[key]) {
+        delete markHash[key];
+      }else{
+        markHash[key] = true;
+      }
+      this.setData(markHash);
+    }
+  },
+
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
@@ -62,20 +140,10 @@ Page({
    */
   onUnload: function () {
     this.stopTiming();
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-
+    // 页面离开时存储游戏时间
+    const levelRecord = wx.getStorageSync('levelRecord') || {};
+    levelRecord[`level_${this.level}`].time = this.time;
+    wx.setStorageSync('levelRecord', levelRecord);
   },
 
   /**

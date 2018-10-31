@@ -1,11 +1,12 @@
 <!--pages/game.wxml-->
+
 <view>第{{uppercaseLevel}}关</view>
 <!-- <view>时间{{time}}</view> -->
 <view class="container">
-  <view class='grid game-col' wx:for="{{levelData}}" wx:key="{{index}}">
-    <view class="grid-content" wx:for="{{item}}" wx:for-index="idx" wx:key="{{idx}}" wx:for-item="text">
+  <view class='grid game-col' wx:for="{{levelData}}" wx:for-index="rowIdx" wx:key="{{rowIndex}}">
+    <view class="grid-content" wx:for="{{item}}" wx:for-index="colIdx" wx:key="{{colIdx}}" wx:for-item="text">
       <view class="text-content">
-        <view class='num-content'>
+        <view class="num-content{{rowIdx === rowIndex && colIdx === colIndex ? ' selected': ''}}{{markHash[`${rowIdx}-${colIdx}`] ? 'mark} : ''}" data-input="{{text === 0}}" data-rowIndex="{{rowIdx}}" data-colIndex="{{colIdx}}" data-selected="{{rowIdx === rowIndex && colIdx === colIndex}}" data-value="{{text}}" bindtap="inputSudoku" >
           <text class='num-text'>{{text === 0 ? '' : text}}</text>
         </view>
       </view>
@@ -15,20 +16,13 @@
 
 <view class="container">
   <view class="grid input-wrap">
-    <view class="input-item">1</view>
-    <view class="input-item">3</view>
-    <view class="input-item">2</view>
-    <view class="input-item">4</view>
-    <view class="input-item">5</view>
-    <view class="input-item">6</view>
-    <view class="input-item">7</view>
+    <view class="input-item" data-number="{{item + 1}}" bindtap="inputNumber" wx:for="{{[1,2,3,4,5,6,7]}}" wx:key="{{index}}">{{item}}</view>
   </view>
   <view class="grid input-wrap">
-    <view class="input-item">8</view>
-    <view class="input-item">9</view>
-    <view class="input-item delete">删除</view>
-    <view class="input-item pause">暂停</view>
-    <view class="input-item mark">标记</view>
-    <view class="input-item restart">重玩</view>
+    <view class="input-item" data-number="{{item}}" bindtap="inputNumber" wx:for="{{[8,9]}}" wx:key="{{index}}">{{item}}</view>  
+    <view class="input-item delete" data-action="delete" bingtap="deleteAction">删除</view>
+    <view class="input-item pause" data-action="pause" bingtap="pauseAction">暂停</view>
+    <view class="input-item mark" data-action="mark" bingtap="markAction">标记</view>
+    <view class="input-item restart" data-action="restart" bingtap="restartAction">重玩</view>
   </view>
 </view>
