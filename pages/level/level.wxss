@@ -1,4 +1,7 @@
 /* level/level.wxss */
+page{
+  background: #f9eac1;
+}
 .level-container{
   display: flex;
   flex-wrap: wrap;
