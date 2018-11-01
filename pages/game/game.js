@@ -1,6 +1,8 @@
 // pages/game.js
 const { sectionToChinese, numToMinute } = require('../../utils/util.js');
 const levelData = require('./gameData.js');
+const Checker = require('../../src/js/core/checker');
+const Toolkit = require('../../src/js/core/toolkit');
 
 Page({
 
@@ -14,9 +16,11 @@ Page({
     time: 0,
     formatTime: '00:00',
     colIndex: '',
-    rowindex: '',
+    rowIndex: '',
     pause: false,
     markHash: {}, // 用于存放标记的单元格 1x1。
+    statusTableData: [], // 错误对照表
+    success: false,
   },
 
   /**
@@ -24,11 +28,19 @@ Page({
    */
   onLoad: function (options) {
     const level = parseInt(options.level || 1);
+    const levelRecord = wx.getStorageSync('levelRecord');
+    const levelRecordData = levelRecord[`level_${level}`] || {};
+    const gameData = levelRecordData && levelRecordData.gameData ? levelRecordData.gameData : null;
     this.setData({
       level, // 关卡
+      time: levelRecordData.time || 0,
       uppercaseLevel: sectionToChinese(level),
-      levelData: levelData[level-1], // 游戏数据
+      levelData: gameData ? gameData.levelData : levelData[level-1], // 游戏数据
       defaultLevelData: levelData[level - 1], // 默认数据
+      statusTableData: gameData ? gameData.statusTableData : Toolkit.matrix.makeMatrix(true),
+      markHash: gameData ? gameData.markHash : {},
+      rowIndex: gameData ? gameData.rowIndex : '',
+      colIndex: gameData ? gameData.colIndex : '',
     });
   },
 
@@ -51,7 +63,6 @@ Page({
 
   // 点击数独格子
   inputSudoku(e) {
-    console.log(e);
     const { input, colindex, rowindex, value, selected } = e.currentTarget.dataset;
     // 允许输入
     if(input) {
@@ -69,9 +80,39 @@ Page({
     const {rowIndex, colIndex, levelData} = this.data;
     if(rowIndex !== '' && colIndex !== '') {
       levelData[rowIndex][colIndex] = number;
+      const checker = new Checker(levelData);
+      checker.check();
       this.setData({
         levelData,
+        statusTableData: checker._matrixMarks,
+      }, () => {
+        this.checkComplete();
       });
+    }
+  },
+
+  // 检查所有空格是否全部填完
+  checkComplete() {
+    const { levelData } = this.data;
+    if (levelData.every(v => v.every(k => k !== 0))) {
+      // 开始检查是否填写正确
+      const checker = new Checker(levelData);
+      if (checker.check()) {
+        console.log('完成游戏！')
+        this.setData({
+          success: true,
+        });
+        this.stopTiming();
+        // 存储游戏时间和关卡
+        const levelRecord = wx.getStorageSync('levelRecord');
+        levelRecord[`level_${this.level}`] = {
+          time: this.time,
+          complete: true,
+        }
+        wx.setStorageSync('levelRecord', levelRecord);
+      } else {
+        console.log('有错误!!!');
+      }
     }
   },
 
@@ -118,12 +159,14 @@ Page({
     }
   },
 
+  // 重新开始游戏
   restartAction() {
     console.log('重新开始游戏')
     this.setData({
       time: 0, 
       levelData: this.data.defaultLevelData,
       markHash: {},
+      statusTableData: Toolkit.matrix.makeMatrix(true),
     });
   },
 
@@ -152,11 +195,26 @@ Page({
    * 生命周期函数--监听页面卸载
    */
   onUnload: function () {
+    console.log('页面卸载啦~~~')
     this.stopTiming();
-    // 页面离开时存储游戏时间
+
+    //判断游戏是否结束，如果没有结束， 那么存储当前游戏记录
     const levelRecord = wx.getStorageSync('levelRecord') || {};
-    levelRecord[`level_${this.level}`].time = this.time;
-    wx.setStorageSync('levelRecord', levelRecord);
+    const { levelData, level, time, statusTableData, markHash, rowIndex, colIndex, success } = this.data;
+    if (!success) {
+      levelRecord[`level_${level}`] = {
+        time,
+        complete: false,
+        gameData: {
+          levelData,
+          statusTableData,
+          markHash,
+          rowIndex,
+          colIndex,
+        },
+      };
+      wx.setStorageSync('levelRecord', levelRecord);
+    }
   },
 
   /**

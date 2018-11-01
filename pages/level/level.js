@@ -22,13 +22,11 @@ Page({
    */
   onReady: function () {
     let levelRecord = {};
-    wx.setStorageSync('levelRecord', {level_1: {time: 100}})
     try {
       levelRecord = wx.getStorageSync('levelRecord') || {};
      
     } catch(e) {
       console.log(e);
-      // Do something when catch error
     }
     const array = [];
     for (let i = 0; i < 24; i++) {
@@ -36,7 +34,7 @@ Page({
       array.push({
         level: i + 1,
         time: levelDataItem ? numToMinute(levelDataItem.time) : '',
-        complete: typeof levelDataItem !== 'undefined',
+        complete: levelDataItem && levelDataItem.complete,
         lock: i === 0 ? false : levelDataItem ? false : true,
       });
     }

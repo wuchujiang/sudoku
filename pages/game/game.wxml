@@ -13,7 +13,8 @@
   <view class='grid game-col' wx:for="{{levelData}}" wx:for-index="rowIdx" wx:key="{{rowIndex}}">
     <view class="grid-content" wx:for="{{item}}" wx:for-index="colIdx" wx:key="{{colIdx}}" wx:for-item="text">
       <view class="text-content">
-        <view class="num-content{{rowIdx === rowIndex && colIdx === colIndex ? ' selected': ''}}{{markHash[rowIdx+'-'+colIdx] ? ' mark' : ''}}{{text===0 ? ' empty': ''}}{{defaultLevelData[rowIdx][colIdx] === 0 && text !== 0 ? ' hasNumber' : ''}}" data-input="{{defaultLevelData[rowIdx][colIdx] === 0 }}" data-rowIndex="{{rowIdx}}" data-colIndex="{{colIdx}}" data-selected="{{rowIdx === rowIndex && colIdx === colIndex}}" data-value="{{text}}" bindtap="inputSudoku" >
+        <view class="num-content{{rowIdx === rowIndex && colIdx === colIndex ? ' selected': ''}}{{markHash[rowIdx+'-'+colIdx] ? ' mark' : ''}}{{text===0 ? ' empty': ''}}{{defaultLevelData[rowIdx][colIdx] === 0 && text !== 0 ? ' hasNumber' : ''}}{{!statusTableData[rowIdx][colIdx] ? ' error' : ''}}" 
+        data-input="{{defaultLevelData[rowIdx][colIdx] === 0 }}" data-rowIndex="{{rowIdx}}" data-colIndex="{{colIdx}}" data-selected="{{rowIdx === rowIndex && colIdx === colIndex}}" data-value="{{text}}" bindtap="inputSudoku" >
           <text class='num-text'>{{text === 0 ? '' : text}}</text>
         </view>
       </view>
@@ -27,7 +28,7 @@
   </view>
   <view class="grid input-wrap">
     <view class="input-item" data-number="{{item}}" bindtap="inputNumber" wx:for="{{[8,9]}}" wx:key="{{index}}">{{item}}</view>  
-    <view class="input-item delete" data-action="delete" bindtap="deleteAction">删除</view>
+    <view class="input-item delete" data-number="{{0}}" bindtap="inputNumber">删除</view>
     <view class="input-item pause" data-action="pause" bindtap="pauseAction">暂停</view>
     <view class="input-item mark" data-action="mark" bindtap="markAction">标记</view>
     <view class="input-item restart" data-action="restart" bindtap="restartAction">重玩</view>

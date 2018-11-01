@@ -9,14 +9,16 @@ function checkArray(array) {
     }
     const v = array[i];
 
-    if (!v) {
-      marks[i] = false;
-      continue;
-    }
+    // 跳过对0的检查
+    // if (!v) {
+    //   marks[i] = false;
+    //   continue;
+    // }
 
     // 是否有重复
+    // 跳过对0的检查
     for (let j = i + 1; j < length; j++) {
-      if (v === array[j]) {
+      if (v === array[j] && v !== 0) {
         marks[i] = marks[j] = false;
       }
     }
@@ -40,7 +42,7 @@ class Checker {
     return this._matrixMarks;
   }
 
-  get isSUccess() {
+  get isSuccess() {
     return this._success;
   }
 
@@ -95,20 +97,21 @@ class Checker {
   }
 }
 
+module.exports = Checker;
 
 // 测试代码
 
-const Generate = require('./generator');
-console.log(Generate)
-const gen = new Generate();
-gen.gernerate();
-const matrix = gen.matrix;
-const checker = new Checker(matrix);
-console.log(checker.check());
-console.log(checker.matrixMarks);
-matrix[1][2] = 1;
-matrix[7][9] = 3;
-matrix[1][4] = 2
-console.log(matrix);
-console.log(checker.check());
-console.log(checker.matrixMarks);
+// const Generate = require('./generator');
+// console.log(Generate)
+// const gen = new Generate();
+// gen.gernerate();
+// const matrix = gen.matrix;
+// const checker = new Checker(matrix);
+// console.log(checker.check());
+// console.log(checker.matrixMarks);
+// matrix[1][2] = 1;
+// matrix[7][9] = 3;
+// matrix[1][4] = 2
+// console.log(matrix);
+// console.log(checker.check());
+// console.log(checker.matrixMarks);
